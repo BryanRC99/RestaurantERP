@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('sucursales', function (Blueprint $table) {
+        Schema::create('ingredientes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('empresa_id')->constrained('empresa')->cascadeOnDelete();
-            $table->string('nombre', 100);
-            $table->string('codigo', 20)->unique();
-            $table->text('direccion');
-            $table->string('telefono', 20)->nullable();
-            $table->string('ciudad', 100)->nullable();
+            // Unidad base en la que se controla el stock de este ingrediente.
+            $table->foreignId('unidad_medida_id')->constrained('unidades_medida');
+            $table->string('nombre', 150);
+            $table->text('descripcion')->nullable();
+            $table->boolean('controla_inventario')->default(true);
             $table->boolean('activo')->default(true);
             $table->timestamps();
         });
@@ -23,6 +23,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('sucursales');
+        Schema::dropIfExists('ingredientes');
     }
 };

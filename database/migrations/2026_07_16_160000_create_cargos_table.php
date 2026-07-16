@@ -8,21 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('sucursales', function (Blueprint $table) {
+        Schema::create('cargos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('empresa_id')->constrained('empresa')->cascadeOnDelete();
             $table->string('nombre', 100);
-            $table->string('codigo', 20)->unique();
-            $table->text('direccion');
-            $table->string('telefono', 20)->nullable();
-            $table->string('ciudad', 100)->nullable();
+            $table->text('descripcion')->nullable();
             $table->boolean('activo')->default(true);
             $table->timestamps();
+
+            $table->unique(['empresa_id', 'nombre']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sucursales');
+        Schema::dropIfExists('cargos');
     }
 };

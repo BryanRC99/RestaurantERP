@@ -8,15 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('empresa', function (Blueprint $table) {
+        Schema::create('proveedores', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('empresa_id')->constrained('empresa')->cascadeOnDelete();
             $table->string('nombre', 150);
-            $table->string('razon_social', 200)->nullable();
-            $table->string('ruc', 20)->nullable()->unique();
-            $table->text('direccion')->nullable();
+            $table->string('ruc', 20)->nullable();
             $table->string('telefono', 20)->nullable();
             $table->string('email', 150)->nullable();
-            $table->text('logo')->nullable();
+            $table->text('direccion')->nullable();
             $table->boolean('activo')->default(true);
             $table->timestamps();
         });
@@ -24,6 +23,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('empresa');
+        Schema::dropIfExists('proveedores');
     }
 };

@@ -8,21 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('sucursales', function (Blueprint $table) {
+        Schema::create('repartidores', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('empresa_id')->constrained('empresa')->cascadeOnDelete();
+            // Nullable: permite repartidores externos que no son empleados de la empresa.
+            $table->foreignId('empleado_id')->nullable()->constrained('empleados')->nullOnDelete();
             $table->string('nombre', 100);
-            $table->string('codigo', 20)->unique();
-            $table->text('direccion');
             $table->string('telefono', 20)->nullable();
-            $table->string('ciudad', 100)->nullable();
             $table->boolean('activo')->default(true);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sucursales');
+        Schema::dropIfExists('repartidores');
     }
 };
