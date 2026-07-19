@@ -8,11 +8,20 @@ use Illuminate\Http\Request;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->statefulApi();
+
+        // Este proyecto es 100% API: nunca redirigir a una ruta 'login' web
+        // que no existe. Un usuario sin sesion valida siempre recibe un 401 JSON.
+        $middleware->redirectGuestsTo(fn () => null);
+
+        $middleware->alias([
+            'sucursal.activa' => \App\Http\Middleware\EnsureSucursalActiva::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
